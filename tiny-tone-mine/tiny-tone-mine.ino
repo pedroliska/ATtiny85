@@ -3,10 +3,10 @@
 int Speaker = 1;
 
 // random range in minutes
-//int rangeStart = 30;
-//int rangeEnd   = 60;
-int rangeStart = 5;
-int rangeEnd   = 10;
+//int rangeStart = 40; // inclusive
+//int rangeEnd   = 80; // exclusive
+int rangeStart = 10;
+int rangeEnd   = 11;
 
 unsigned long lastStopToneMs = 0;
 unsigned long silenceMs = 0;
@@ -28,17 +28,13 @@ void loop()
     TCCR1 = 0x90;   // stop the counter (stop tone)
 
     lastStopToneMs = currentMs;
-    silenceMs = 4000;
 
-    //delay(1000);
+    int randomInsideRange = random(rangeStart, rangeEnd);
+    // 1 minute = 60000 miliseconds
+    silenceMs = randomInsideRange*60000;
+    //silenceMs = randomInsideRange*1000;
+    //silenceMs = 50000;
   }
-
-  
-
-  
-  //int randomMinutes = random(rangeStart, rangeEnd);
-  //// 1 minute = 3600 miliseconds
-  //delay(randomMinutes * 3600);
 }
 
 void startTone() {
@@ -52,12 +48,12 @@ void startTone() {
   //OCR1C = 255; // lowest pitch (max value)
 
   // hi pitch combo
-  //TCCR1 = 0x94;
-  //OCR1C = 4;
+//  TCCR1 = 0x94;
+//  OCR1C = 4;
 
   // old phone combo
-  //TCCR1 = 0x99;   
-  //OCR1C = 255;
+//  TCCR1 = 0x99;   
+//  OCR1C = 255;
 
   // audible combo
   TCCR1 = 0x94;
