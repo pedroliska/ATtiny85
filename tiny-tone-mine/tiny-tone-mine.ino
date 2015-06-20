@@ -7,9 +7,10 @@ int Speaker = 1;
 //int rangeEnd   = 80; // exclusive
 // works with:
 //   1, 2 
+//   5, 6
 //   10,11
-int rangeStart = 10;
-int rangeEnd   = 11;
+int rangeStart = 20;
+int rangeEnd   = 21;
 
 unsigned long lastStopToneMs = 0;
 unsigned long silenceMs = 0;
@@ -23,6 +24,11 @@ void loop()
 {
 
   unsigned long currentMs = millis();
+  // the arduino site says millis resets overflows (goes to zero)
+  // after about 50 days.
+  if (currentMs < lastStopToneMs) {
+    lastStopToneMs = 0;
+  }
 
   if (currentMs - lastStopToneMs > silenceMs) 
   {
