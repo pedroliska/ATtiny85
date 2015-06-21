@@ -9,8 +9,11 @@ int Speaker = 1;
 //   1, 2 
 //   5, 6
 //   10,11
+//   20,21
 int rangeStart = 20;
-int rangeEnd   = 21;
+int rangeEnd   = 31;
+// 1 minute = 60000 miliseconds
+int rangeMultiplier = 60000;
 
 unsigned long lastStopToneMs = 0;
 unsigned long silenceMs = 0;
@@ -39,8 +42,7 @@ void loop()
     lastStopToneMs = currentMs;
 
     int randomInsideRange = random(rangeStart, rangeEnd);
-    // 1 minute = 60000 miliseconds
-    silenceMs = randomInsideRange*60000;
+    silenceMs = randomInsideRange * rangeMultiplier;
     //silenceMs = randomInsideRange*1000;
     //silenceMs = 5000;
   }
