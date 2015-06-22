@@ -10,12 +10,19 @@ int Speaker = 1;
 //   5, 6
 //   10,11
 //   20,21
-int rangeStart = 20;
-int rangeEnd   = 31;
-// 1 minute = 60000 miliseconds
-int rangeMultiplier = 60000;
+// did not work with:
+//  30,90
+int rangeStart = 10;
+int rangeEnd   = 30;
 
-unsigned long lastStopToneMs = 0;
+// 1 minute = 60000 miliseconds
+//int rangeMultiplier = 60000;
+// 1 second = 1000 miliseconds
+int rangeMultiplier = 1000;
+
+int toneDurationMs = 1000;
+
+unsigned long lastToneStartMs = 0;
 unsigned long silenceMs = 0;
 
 void setup()
@@ -29,20 +36,20 @@ void loop()
   unsigned long currentMs = millis();
   // the arduino site says millis resets overflows (goes to zero)
   // after about 50 days.
-  if (currentMs < lastStopToneMs) {
-    lastStopToneMs = 0;
+  if (currentMs < lastToneStartMs) {
+    lastToneStartMs = 0;
   }
 
-  if (currentMs - lastStopToneMs > silenceMs) 
+  if (currentMs - lastToneStartMs  > silenceMs) 
   {
     startTone();
-    delay(1500);    // let the tone sound for a bit
-    TCCR1 = 0x90;   // stop the counter (stop tone)
+    delay(toneDurationMs);  // let the tone sound for a bit
+    TCCR1 = 0x90;           // stop tone (stop the counter)
 
-    lastStopToneMs = currentMs;
+    lastToneStartMs = currentMs;
 
     int randomInsideRange = random(rangeStart, rangeEnd);
-    silenceMs = randomInsideRange * rangeMultiplier;
+    silenceMs = randomInsideRange * (long)rangeMultiplier;
     //silenceMs = randomInsideRange*1000;
     //silenceMs = 5000;
   }
