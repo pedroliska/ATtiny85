@@ -1,5 +1,3 @@
-/* TinyTone for ATtiny85 */
-
 int Speaker = 1;
 
 // random range in minutes
@@ -10,13 +8,15 @@ int Speaker = 1;
 //   5, 6
 //   10,11
 //   20,21
+//   30,31
 // did not work with:
 //  30,90
+//  30,36
 int rangeStart = 30;
-int rangeEnd   = 36;
+int rangeEnd   = 41;
 
 // 1 minute = 60000 miliseconds
-int rangeMultiplier = 60000;
+unsigned long rangeMultiplier = 60000;
 // 1 second = 1000 miliseconds
 //int rangeMultiplier = 1000;
 
@@ -49,7 +49,7 @@ void loop()
     lastToneStartMs = currentMs;
 
     int randomInsideRange = random(rangeStart, rangeEnd);
-    silenceMs = randomInsideRange * (long)rangeMultiplier;
+    silenceMs = randomInsideRange * rangeMultiplier;
     //silenceMs = randomInsideRange*1000;
     //silenceMs = 5000;
   }
