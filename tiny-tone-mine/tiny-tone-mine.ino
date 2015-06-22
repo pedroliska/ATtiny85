@@ -12,13 +12,13 @@ int Speaker = 1;
 //   20,21
 // did not work with:
 //  30,90
-int rangeStart = 10;
-int rangeEnd   = 30;
+int rangeStart = 30;
+int rangeEnd   = 36;
 
 // 1 minute = 60000 miliseconds
-//int rangeMultiplier = 60000;
+int rangeMultiplier = 60000;
 // 1 second = 1000 miliseconds
-int rangeMultiplier = 1000;
+//int rangeMultiplier = 1000;
 
 int toneDurationMs = 1000;
 
