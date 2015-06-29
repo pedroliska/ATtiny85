@@ -18,6 +18,9 @@ int WAKE_INDICATOR_LIGHT_MS = 1000;
 int RANDOM_SLEEP_MIN = 1;
 int RANDOM_SLEEP_MAX = 2;
 
+#define BODS 7                   //BOD Sleep bit in MCUCR
+#define BODSE 2                  //BOD Sleep enable bit in MCUCR
+
 uint8_t ledState, mode, mcucr1, mcucr2;
 bool keepSleeping;                   //flag to keep sleeping or not in random mode
 unsigned long msNow;                 //the current time from millis()
@@ -34,10 +37,10 @@ void setup() {
 }
 
 void loop() {
-//  msNow = millis();
-//  goToSleep();
   blinkLed(REGULAR_LIGHT_MS);
-  delay(1000);
+  msNow = millis();
+  goToSleep();
+  //delay(1000);
 }
 
 void setPinsOutput(void)
@@ -61,8 +64,6 @@ void blinkLed (int msOfLight) {
 void goToSleep(void)
 {
     do {
-        GIMSK |= _BV(INT0);                       //enable INT0
-        MCUCR &= ~(_BV(ISC01) | _BV(ISC00));      //INT0 on low level
         ACSR |= _BV(ACD);                         //disable the analog comparator
         ADCSRA &= ~_BV(ADEN);                     //disable ADC
         set_sleep_mode(SLEEP_MODE_PWR_DOWN);
@@ -82,7 +83,6 @@ void goToSleep(void)
         sleep_cpu();                   //go to sleep
                                        //----zzzz----zzzz----zzzz----zzzz
         cli();                         //wake up here, disable interrupts
-        GIMSK = 0x00;                  //disable INT0
         sleep_disable();
         wdtDisable();                  //don't need the watchdog while we're awake
         sei();                         //enable interrupts again (but INT0 is disabled above)
@@ -102,6 +102,8 @@ void goToSleep(void)
     wdtCount = 0;     //set up for next time
     wdtLimit = random(RANDOM_SLEEP_MIN, RANDOM_SLEEP_MAX + 1);
 }
+
+ISR(WDT_vect) {}                  //don't need to do anything here when the WDT wakes the MCU
 
 //enable the WDT for 8sec interrupt
 void wdtEnable(void)
