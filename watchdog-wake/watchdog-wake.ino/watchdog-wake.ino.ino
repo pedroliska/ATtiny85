@@ -9,6 +9,9 @@
 #include "millionUtil.h"         //not needed if compiled with Arduino & Arduino-Tiny
 #endif
 
+#define BODS 7                   //BOD Sleep bit in MCUCR
+#define BODSE 2                  //BOD Sleep enable bit in MCUCR
+
 int PIN = 1;
 int REGULAR_LIGHT_MS = 3000;
 int WAKE_INDICATOR_LIGHT_MS = 1000;
@@ -18,15 +21,10 @@ int WAKE_INDICATOR_LIGHT_MS = 1000;
 int RANDOM_SLEEP_MIN = 1;
 int RANDOM_SLEEP_MAX = 2;
 
-#define BODS 7                   //BOD Sleep bit in MCUCR
-#define BODSE 2                  //BOD Sleep enable bit in MCUCR
-
-uint8_t ledState, mode, mcucr1, mcucr2;
-bool keepSleeping;                   //flag to keep sleeping or not in random mode
+uint8_t mcucr1, mcucr2;
+bool keepSleeping;                   //flag to keep sleeping or not
 unsigned long msNow;                 //the current time from millis()
-unsigned long msLast;                //the last time the LEDs were changed
 unsigned long msWakeUp;              //the time we woke up
-unsigned long msRunTime;             //how long to stay awake for
 long wdtCount;                       //how many 8-sec WDT periods we've slept for
 long wdtLimit;                       //number of WDT periods to wake after
 
@@ -38,9 +36,7 @@ void setup() {
 
 void loop() {
   blinkLed(REGULAR_LIGHT_MS);
-  msNow = millis();
   goToSleep();
-  //delay(1000);
 }
 
 void setPinsOutput(void)
@@ -63,6 +59,7 @@ void blinkLed (int msOfLight) {
 
 void goToSleep(void)
 {
+    msNow = millis();
     do {
         ACSR |= _BV(ACD);                         //disable the analog comparator
         ADCSRA &= ~_BV(ADEN);                     //disable ADC
