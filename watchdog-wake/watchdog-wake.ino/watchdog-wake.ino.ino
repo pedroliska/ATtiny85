@@ -30,7 +30,7 @@ long wdtLimit;                       //number of WDT periods to wake after
 void setup() {
 //  wdt_reset();
 //  wdtDisable();
-//  setPinsOutput();
+  setPinsOutput();
 }
 
 void loop() {
@@ -38,6 +38,24 @@ void loop() {
 //  goToSleep();
   blinkLed(REGULAR_LIGHT_MS);
   delay(1000);
+}
+
+void setPinsOutput(void)
+{
+    pinMode(PIN, OUTPUT);
+}
+
+void setPinsInput(void)
+{
+    digitalWrite(PIN, LOW);
+    pinMode(PIN, INPUT);
+}
+
+void blinkLed (int msOfLight) {
+  setPinsOutput();            //briefly blink an LED so we can see the wdt wake-ups
+  digitalWrite(PIN, HIGH);
+  delay(msOfLight);
+  setPinsInput();
 }
 
 void goToSleep(void)
@@ -108,20 +126,4 @@ void wdtDisable(void)
     sei();
 }
 
-void setPinsOutput(void)
-{
-    pinMode(PIN, OUTPUT);
-}
-
-void setPinsInput(void)
-{
-    digitalWrite(PIN, LOW);
-}
-
-void blinkLed (int secondsOfLight) {
-  setPinsOutput();            //briefly blink an LED so we can see the wdt wake-ups
-  digitalWrite(PIN, HIGH);
-  delay(secondsOfLight * (unsigned long)1000);
-  setPinsInput();
-}
 
