@@ -13,13 +13,22 @@
 #define BODSE 2                  //BOD Sleep enable bit in MCUCR
 
 int PIN = 1;
-int REGULAR_LIGHT_MS = 3000;
-int WAKE_INDICATOR_LIGHT_MS = 1000;
+int REGULAR_HI_MS = 1000;
+//int WAKE_INDICATOR_HI_MS = 300;
+int WAKE_INDICATOR_HI_MS = 0;
 
 //int RANDOM_SLEEP_MIN = 73;      //minimum number of 8-sec wdt periods to sleep for in random mode (~10 min)
 //int RANDOM_SLEEP_MAX = 220;     //maximum number of 8-sec wdt periods to sleep for in random mode (~30 min)
-int RANDOM_SLEEP_MIN = 1;
-int RANDOM_SLEEP_MAX = 2;
+//int RANDOM_SLEEP_MIN = 1;
+//int RANDOM_SLEEP_MAX = 2;
+//int RANDOM_SLEEP_MIN = 38;  //5 mins
+//int RANDOM_SLEEP_MAX = 38;  //5 mins
+//int RANDOM_SLEEP_MIN = 8;  //1 min
+//int RANDOM_SLEEP_MAX = 8;  //1 min
+//int RANDOM_SLEEP_MIN = 75;   // 10 mins (10 * 60 / 8)
+//int RANDOM_SLEEP_MAX = 112;  // 15 mins
+int RANDOM_SLEEP_MIN = 675;  // 90 mins
+int RANDOM_SLEEP_MAX = 675;  // 90 mins
 
 uint8_t mcucr1, mcucr2;
 bool keepSleeping;                   //flag to keep sleeping or not
@@ -35,7 +44,8 @@ void setup() {
 }
 
 void loop() {
-  blinkLed(REGULAR_LIGHT_MS);
+  //blinkLed(REGULAR_HI_MS);
+  makeTone(REGULAR_HI_MS);
   goToSleep();
 }
 
@@ -56,6 +66,37 @@ void blinkLed (int msOfLight) {
   delay(msOfLight);
   setPinsInput();
 }
+void makeTone(int msOfTone) {
+  startTone();
+  delay(msOfTone);  // let the tone sound for a bit
+  stopTone();
+}
+void startTone() {
+  //TCCR1 = 0x94; // faster clock
+  //TCCR1 = 0x99;   
+  //TCCR1 = 0x9F;   // slower clock (max value)
+
+  //OCR1C = 4; // highest pitch (hard to listen)
+  //OCR1C = 5;
+  //OCR1C = 200;
+  //OCR1C = 255; // lowest pitch (max value)
+
+  // hi pitch combo (perfect with 3v no resistor, and no transistor)
+//  TCCR1 = 0x94;
+//  OCR1C = 4;
+
+  // old phone combo (too silent with 3v, no resistor, and no transistor)
+//  TCCR1 = 0x99;   
+//  OCR1C = 255;
+
+  // audible combo
+  TCCR1 = 0x94;
+  OCR1C = 20;
+}
+void stopTone() {
+  TCCR1 = 0x90;           // stop the counter
+}
+
 
 void goToSleep(void)
 {
@@ -86,7 +127,9 @@ void goToSleep(void)
 
         if (++wdtCount < wdtLimit) {
             keepSleeping = true;
-            blinkLed(WAKE_INDICATOR_LIGHT_MS);            //briefly blink an LED so we can see the wdt wake-ups
+            if (WAKE_INDICATOR_HI_MS > 0) {
+              //blinkLed(WAKE_INDICATOR_HI_MS);            //briefly blink an LED so we can see the wdt wake-ups
+            }
         }
         else {
             keepSleeping = false;
