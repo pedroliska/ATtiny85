@@ -13,9 +13,9 @@
 #define BODSE 2                  //BOD Sleep enable bit in MCUCR
 
 int PIN = 1;
-int REGULAR_HI_MS = 1000;
-int WAKE_INDICATOR_HI_MS = 200;
-//int WAKE_INDICATOR_HI_MS = 0;
+int REGULAR_HI_MS = 600;
+//int WAKE_INDICATOR_HI_MS = 200;
+int WAKE_INDICATOR_HI_MS = 0;
 
 //int RANDOM_SLEEP_MIN = 73;  // minimum number of 8-sec WDT periods to sleep for (~10 min)
 //int RANDOM_SLEEP_MAX = 220; // maximum number of 8-sec WDT periods to sleep for (~30 min)
@@ -25,10 +25,10 @@ int WAKE_INDICATOR_HI_MS = 200;
 //int RANDOM_SLEEP_MAX = 38;  //5 mins
 //int RANDOM_SLEEP_MIN = 8;   //1 min
 //int RANDOM_SLEEP_MAX = 8;   //1 min
-//int RANDOM_SLEEP_MIN = 75;  // 10 mins (10 * 60 / 8)
-//int RANDOM_SLEEP_MAX = 112; // 15 mins
-int RANDOM_SLEEP_MIN = 675;  // 90 mins
-int RANDOM_SLEEP_MAX = 675;  // 90 mins
+int RANDOM_SLEEP_MIN = 75;    // 10 mins (10 * 60 / 8)
+int RANDOM_SLEEP_MAX = 112;   // 15 mins
+//int RANDOM_SLEEP_MIN = 675; // 90 mins
+//int RANDOM_SLEEP_MAX = 675; // 90 mins
 
 uint8_t mcucr1, mcucr2;
 bool keepSleeping;                   //flag to keep sleeping or not
