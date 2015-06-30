@@ -14,19 +14,19 @@
 
 int PIN = 1;
 int REGULAR_HI_MS = 1000;
-//int WAKE_INDICATOR_HI_MS = 300;
-int WAKE_INDICATOR_HI_MS = 0;
+int WAKE_INDICATOR_HI_MS = 200;
+//int WAKE_INDICATOR_HI_MS = 0;
 
-//int RANDOM_SLEEP_MIN = 73;      //minimum number of 8-sec wdt periods to sleep for in random mode (~10 min)
-//int RANDOM_SLEEP_MAX = 220;     //maximum number of 8-sec wdt periods to sleep for in random mode (~30 min)
+//int RANDOM_SLEEP_MIN = 73;  // minimum number of 8-sec WDT periods to sleep for (~10 min)
+//int RANDOM_SLEEP_MAX = 220; // maximum number of 8-sec WDT periods to sleep for (~30 min)
 //int RANDOM_SLEEP_MIN = 1;
 //int RANDOM_SLEEP_MAX = 2;
 //int RANDOM_SLEEP_MIN = 38;  //5 mins
 //int RANDOM_SLEEP_MAX = 38;  //5 mins
-//int RANDOM_SLEEP_MIN = 8;  //1 min
-//int RANDOM_SLEEP_MAX = 8;  //1 min
-//int RANDOM_SLEEP_MIN = 75;   // 10 mins (10 * 60 / 8)
-//int RANDOM_SLEEP_MAX = 112;  // 15 mins
+//int RANDOM_SLEEP_MIN = 8;   //1 min
+//int RANDOM_SLEEP_MAX = 8;   //1 min
+//int RANDOM_SLEEP_MIN = 75;  // 10 mins (10 * 60 / 8)
+//int RANDOM_SLEEP_MAX = 112; // 15 mins
 int RANDOM_SLEEP_MIN = 675;  // 90 mins
 int RANDOM_SLEEP_MAX = 675;  // 90 mins
 
@@ -40,32 +40,14 @@ long wdtLimit;                       //number of WDT periods to wake after
 void setup() {
 //  wdt_reset();
 //  wdtDisable();
-  setPinsOutput();
+  pinMode(PIN, OUTPUT);
 }
 
 void loop() {
-  //blinkLed(REGULAR_HI_MS);
   makeTone(REGULAR_HI_MS);
   goToSleep();
 }
 
-void setPinsOutput(void)
-{
-    pinMode(PIN, OUTPUT);
-}
-
-void setPinsInput(void)
-{
-    digitalWrite(PIN, LOW);
-    pinMode(PIN, INPUT);
-}
-
-void blinkLed (int msOfLight) {
-  setPinsOutput();            //briefly blink an LED so we can see the wdt wake-ups
-  digitalWrite(PIN, HIGH);
-  delay(msOfLight);
-  setPinsInput();
-}
 void makeTone(int msOfTone) {
   startTone();
   delay(msOfTone);  // let the tone sound for a bit
@@ -101,6 +83,9 @@ void stopTone() {
 void goToSleep(void)
 {
     msNow = millis();
+    wdtCount = 0;
+    wdtLimit = random(RANDOM_SLEEP_MIN, RANDOM_SLEEP_MAX + 1);
+    
     do {
         ACSR |= _BV(ACD);                         //disable the analog comparator
         ADCSRA &= ~_BV(ADEN);                     //disable ADC
@@ -128,7 +113,7 @@ void goToSleep(void)
         if (++wdtCount < wdtLimit) {
             keepSleeping = true;
             if (WAKE_INDICATOR_HI_MS > 0) {
-              //blinkLed(WAKE_INDICATOR_HI_MS);            //briefly blink an LED so we can see the wdt wake-ups
+              makeTone(WAKE_INDICATOR_HI_MS);            //briefly blink an LED so we can see the wdt wake-ups
             }
         }
         else {
@@ -136,11 +121,7 @@ void goToSleep(void)
         }
     } while (keepSleeping);
     
-    setPinsOutput();
     msWakeUp = millis();
-
-    wdtCount = 0;     //set up for next time
-    wdtLimit = random(RANDOM_SLEEP_MIN, RANDOM_SLEEP_MAX + 1);
 }
 
 ISR(WDT_vect) {}                  //don't need to do anything here when the WDT wakes the MCU
