@@ -37,11 +37,7 @@ unsigned long msWakeUp;              //the time we woke up
 long wdtCount;                       //how many 8-sec WDT periods we've slept for
 long wdtLimit;                       //number of WDT periods to wake after
 
-void setup() {
-//  wdt_reset();
-//  wdtDisable();
-  pinMode(PIN, OUTPUT);
-}
+void setup() { }
 
 void loop() {
   makeTone(REGULAR_HI_MS);
@@ -49,9 +45,11 @@ void loop() {
 }
 
 void makeTone(int msOfTone) {
+  pinMode(PIN, OUTPUT);
   startTone();
   delay(msOfTone);  // let the tone sound for a bit
   stopTone();
+  pinMode(PIN, INPUT);
 }
 void startTone() {
   //TCCR1 = 0x94; // faster clock
