@@ -13,7 +13,7 @@
 #define BODSE 2                  //BOD Sleep enable bit in MCUCR
 
 int PIN = 1;
-int REGULAR_HI_MS = 600;
+int REGULAR_HI_MS = 900;
 int WAKE_INDICATOR_HI_MS = 0; //200;
 
 //int RANDOM_SLEEP_MIN = 1;   // minimum number of 8-sec WDT periods to sleep for
