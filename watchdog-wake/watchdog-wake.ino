@@ -14,19 +14,14 @@
 
 int PIN = 1;
 int REGULAR_HI_MS = 600;
-//int WAKE_INDICATOR_HI_MS = 200;
-int WAKE_INDICATOR_HI_MS = 0;
+int WAKE_INDICATOR_HI_MS = 0; //200;
 
-//int RANDOM_SLEEP_MIN = 73;  // minimum number of 8-sec WDT periods to sleep for (~10 min)
-//int RANDOM_SLEEP_MAX = 220; // maximum number of 8-sec WDT periods to sleep for (~30 min)
-//int RANDOM_SLEEP_MIN = 1;
-//int RANDOM_SLEEP_MAX = 2;
-//int RANDOM_SLEEP_MIN = 38;  //5 mins
-//int RANDOM_SLEEP_MAX = 38;  //5 mins
-//int RANDOM_SLEEP_MIN = 8;   //1 min
-//int RANDOM_SLEEP_MAX = 8;   //1 min
-int RANDOM_SLEEP_MIN = 75;    // 10 mins (10 * 60 / 8)
-int RANDOM_SLEEP_MAX = 112;   // 15 mins
+//int RANDOM_SLEEP_MIN = 1;   // minimum number of 8-sec WDT periods to sleep for
+//int RANDOM_SLEEP_MAX = 2;   // maximum number of 8-sec WDT periods to sleep for
+//int RANDOM_SLEEP_MIN = 75;  // 10 mins (10 * 60 / 8)
+//int RANDOM_SLEEP_MAX = 112; // 15 mins
+int RANDOM_SLEEP_MIN = 225;   // 30 mins
+int RANDOM_SLEEP_MAX = 525;   // 70 mins
 //int RANDOM_SLEEP_MIN = 675; // 90 mins
 //int RANDOM_SLEEP_MAX = 675; // 90 mins
 
@@ -62,16 +57,16 @@ void startTone() {
   //OCR1C = 255; // lowest pitch (max value)
 
   // hi pitch combo (perfect with 3v no resistor, and no transistor)
-//  TCCR1 = 0x94;
-//  OCR1C = 4;
+  TCCR1 = 0x94;
+  OCR1C = 4;
 
-  // old phone combo (too silent with 3v, no resistor, and no transistor)
+//  // old phone combo (too silent with 3v, no resistor, and no transistor)
 //  TCCR1 = 0x99;   
 //  OCR1C = 255;
 
-  // audible combo
-  TCCR1 = 0x94;
-  OCR1C = 20;
+//  // audible combo
+//  TCCR1 = 0x94;
+//  OCR1C = 20;
 }
 void stopTone() {
   TCCR1 = 0x90;           // stop the counter
@@ -146,5 +141,4 @@ void wdtDisable(void)
     WDTCR = 0x00;
     sei();
 }
-
 
