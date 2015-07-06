@@ -15,28 +15,31 @@
 int PIN = 1;
 int REGULAR_HI_MS = 900;
 int WAKE_INDICATOR_HI_MS = 0; //200;
+int INITIAL_BEEP_COUNT = 3;   // number of "test" beeps before we go into the real loop
 
 //int RANDOM_SLEEP_MIN = 1;   // minimum number of 8-sec WDT periods to sleep for
 //int RANDOM_SLEEP_MAX = 2;   // maximum number of 8-sec WDT periods to sleep for
-//int RANDOM_SLEEP_MIN = 75;  // 10 mins (10 * 60 / 8)
-//int RANDOM_SLEEP_MAX = 112; // 15 mins
-int RANDOM_SLEEP_MIN = 225;   // 30 mins
-int RANDOM_SLEEP_MAX = 525;   // 70 mins
-//int RANDOM_SLEEP_MIN = 675; // 90 mins
-//int RANDOM_SLEEP_MAX = 675; // 90 mins
+int RANDOM_SLEEP_MIN = 15;    // 2 mins (2 * 60 / 8)
+int RANDOM_SLEEP_MAX = 46;    // 6 mins
+//int RANDOM_SLEEP_MIN = 225; // 30 mins
+//int RANDOM_SLEEP_MAX = 525; // 70 mins
 
 uint8_t mcucr1, mcucr2;
 bool keepSleeping;                   //flag to keep sleeping or not
 unsigned long msNow;                 //the current time from millis()
 unsigned long msWakeUp;              //the time we woke up
 long wdtCount;                       //how many 8-sec WDT periods we've slept for
-long wdtLimit;                       //number of WDT periods to wake after
 
-void setup() { }
+void setup() { 
+  for (int i=0; i < INITIAL_BEEP_COUNT - 1; i++) {
+    makeTone(REGULAR_HI_MS);
+    goToSleep(1);
+  }
+}
 
 void loop() {
   makeTone(REGULAR_HI_MS);
-  goToSleep();
+  goToSleep(random(RANDOM_SLEEP_MIN, RANDOM_SLEEP_MAX + 1));
 }
 
 void makeTone(int msOfTone) {
@@ -72,12 +75,11 @@ void stopTone() {
   TCCR1 = 0x90;           // stop the counter
 }
 
-
-void goToSleep(void)
+// wdtLimit = number of WDT periods to wake after
+void goToSleep(long wdtLimit)
 {
     msNow = millis();
     wdtCount = 0;
-    wdtLimit = random(RANDOM_SLEEP_MIN, RANDOM_SLEEP_MAX + 1);
     
     do {
         ACSR |= _BV(ACD);                         //disable the analog comparator
