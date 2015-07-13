@@ -13,14 +13,16 @@
 #define BODSE 2                  //BOD Sleep enable bit in MCUCR
 
 int PIN = 1;
-int REGULAR_HI_MS = 900;
+int REGULAR_HI_MS = 800;
 int WAKE_INDICATOR_HI_MS = 0; //200;
 int INITIAL_BEEP_COUNT = 3;   // number of "test" beeps before we go into the real loop
 
-//int RANDOM_SLEEP_MIN = 1;   // minimum number of 8-sec WDT periods to sleep for
-//int RANDOM_SLEEP_MAX = 2;   // maximum number of 8-sec WDT periods to sleep for
-int RANDOM_SLEEP_MIN = 15;    // 2 mins (2 * 60 / 8)
-int RANDOM_SLEEP_MAX = 46;    // 6 mins
+// RANDOM_SLEEP_MIN = minimum number of 8-sec WDT periods to sleep for
+// RANDOM_SLEEP_MAX = maximum number of 8-sec WDT periods to sleep for
+//int RANDOM_SLEEP_MIN = 15;  // 2 mins (2 * 60 / 8)
+//int RANDOM_SLEEP_MAX = 46;  // 6 mins
+int RANDOM_SLEEP_MIN = 75;    // 10 mins
+int RANDOM_SLEEP_MAX = 450;   // 60 mins
 //int RANDOM_SLEEP_MIN = 225; // 30 mins
 //int RANDOM_SLEEP_MAX = 525; // 70 mins
 
