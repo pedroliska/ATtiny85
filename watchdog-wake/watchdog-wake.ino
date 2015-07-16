@@ -21,8 +21,8 @@ int INITIAL_BEEP_COUNT = 3;   // number of "test" beeps before we go into the re
 // RANDOM_SLEEP_MAX = maximum number of 8-sec WDT periods to sleep for
 //int RANDOM_SLEEP_MIN = 15;  // 2 mins (2 * 60 / 8)
 //int RANDOM_SLEEP_MAX = 46;  // 6 mins
-int RANDOM_SLEEP_MIN = 75;    // 10 mins
-int RANDOM_SLEEP_MAX = 450;   // 60 mins
+int RANDOM_SLEEP_MIN = 37;    // 5 mins
+int RANDOM_SLEEP_MAX = 150;   // 20 mins
 //int RANDOM_SLEEP_MIN = 225; // 30 mins
 //int RANDOM_SLEEP_MAX = 525; // 70 mins
 
