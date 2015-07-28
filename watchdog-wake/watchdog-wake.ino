@@ -20,7 +20,7 @@ int INITIAL_BEEP_COUNT = 3;   // number of "test" beeps before we go into the re
 // RANDOM_SLEEP_MIN = minimum number of 8-sec WDT periods to sleep for
 // RANDOM_SLEEP_MAX = maximum number of 8-sec WDT periods to sleep for
 int RANDOM_SLEEP_MIN = 15;    // 2 mins (2 * 60 / 8)
-int RANDOM_SLEEP_MAX = 150;   // 20 mins
+int RANDOM_SLEEP_MAX = 45;    // 6 mins
 //int RANDOM_SLEEP_MIN = 225; // 30 mins
 //int RANDOM_SLEEP_MAX = 525; // 70 mins
 
@@ -61,7 +61,8 @@ void startTone() {
 
   // hi pitch combo (perfect with 3v no resistor, and no transistor)
   TCCR1 = 0x94;
-  OCR1C = 4;
+  //OCR1C = 4;
+  OCR1C = 6;
 
 //  // old phone combo (too silent with 3v, no resistor, and no transistor)
 //  TCCR1 = 0x99;   
